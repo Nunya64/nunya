@@ -1,9 +1,8 @@
 pipeline {
     agent any
     stages {
-        stage('Clone Repository') {
+        stage('List Files') {
             steps {
-                git branch: 'main', credentialsId: 'github-ssh-nunya', url: 'git@github.com:Nunya64/nunya.git'
                 sh 'ls -la'
             }
         }
