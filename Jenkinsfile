@@ -12,5 +12,11 @@ pipeline {
                 sh 'docker --version'
             }
         }
+        stage('Build and Run Docker') {
+            steps {
+                sh 'docker build -t nunya-app .'
+                sh 'docker run nunya-app'
+            }
+        }
     }
 }
