@@ -1,20 +1,27 @@
 pipeline {
     agent any
     stages {
-        stage("List Files") {
+        stage('Checkout') {
             steps {
-                sh "ls -la"
+                git branch: 'main',
+                    credentialsId: 'ssh-key-Nunya64',
+                    url: 'git@github.com:Nunya64/nunya.git'
             }
         }
-        stage("Test Docker") {
+        stage('List Files') {
             steps {
-                sh "docker --version"
+                sh 'ls -la'
             }
         }
-        stage("Build and Run Docker") {
+        stage('Test Docker') {
             steps {
-                sh "docker build -t nunya-app ."
-                sh "docker run nunya-app"
+                sh 'docker --version'
+            }
+        }
+        stage('Build and Run Docker') {
+            steps {
+                sh 'docker build -t nunya-app .'
+                sh 'docker run nunya-app'
             }
         }
     }
