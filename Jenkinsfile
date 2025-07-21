@@ -1,12 +1,30 @@
 pipeline {
     agent any
+
+    environment {
+        GIT_SSH_COMMAND = "ssh -i /var/jenkins_home/.ssh/jenkins_nunya"
+        IMAGE_NAME = "nunya64/hello-docker"
+    }
+
     stages {
-        stage('Checkout and Verify') {
+        stage('Clone Repo') {
             steps {
-                git branch: 'main',
-                    credentialsId: 'ssh-key-Nunya64',
-                    url: 'git@github.com:Nunya64/nunya.git'
-                sh 'ls -la'
+                sh 'rm -rf nunya || true'
+                sh 'git clone -b main git@github.com:Nunya64/nunya.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                dir('nunya') {
+                    sh 'docker build -t $IMAGE_NAME .'
+                }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                sh 'docker run --rm $IMAGE_NAME'
             }
         }
     }
